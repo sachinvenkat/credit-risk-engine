@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF=8">
+        <title>Credit Risk Assessment</title>
+        <style>
+            body {font-family:sans-serif ; margin: 2em; }
+            form {max-width: 60px;}
+            div {margin-bottom: 1em;}
+            label{display: block; margin-bottom: 5px;}
+            input, select{width: 100%; padding: 8px; box-sizing: border-box;}
+            h2 {color: #333;}
+            .result {padding: 1m; background: #f4f4f4; border: 1px solid #ddd}
+        </style>
+    </head>
+<body>
+    <h2>New Credit Applications</h2>
+    <form action "{% url 'predict' %}" method="POST">
+        {% csrf_token %}
+
+        <div>
+            <label for="duration"> Loan Duration (months) </label>
+            <input type="number" name="duration" required>
+        </div>
+        <div>
+            <label for="credit_amount"> Credit Amount ($) </label>
+            <input type="number" name="credit_amount" required>
+        </div>
+        <div>
+            <label for="age">Age</label>
+            <input type="number" name="age" required>
+        </div>
+        <div>
+            <label for="purpose">Purpose</label>
+            <select name="purpose" required>
+                <option value="A40">Car (new)</option>
+                <option value="A41">Car (used)</option>
+                <option value="A42">Furniture / Equipment</option>
+                <option value="A43">Radio/ Television</option>
+            </select>        
+        </div>
+    <button type="submit">Check Risk</button>
+    </form>
+{% if prediction_text %}
+    <h2 style="margin-top: 2em;">Prediction result</h2>
+    <div class="result">
+        <h3>{{ prediction_text }}</h3>
+        <p>Confidence:{{ probability_text }}</p>
+    </div>
+{% endif %}
+</body>
+</html>

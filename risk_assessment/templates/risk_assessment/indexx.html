@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Credit Risk Assessment</title>
+        <style>
+            /* Global Styles and Typography */
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 2em;
+                background-color: #f8f9fa; /* Light background */
+                color: #333;
+            }
+            
+            /* Header Styling */
+            h2 {
+                color: #007bff; /* Primary blue for headers */
+                border-bottom: 2px solid #e9ecef;
+                padding-bottom: 0.5em;
+                margin-top: 0;
+            }
+            
+            /* Form Container */
+            form {
+                max-width: 400px; /* Increased width for better form feel */
+                padding: 20px;
+                background: #ffffff;
+                border: 1px solid #dee2e6;
+                border-radius: 8px; /* Rounded corners */
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            /* Form Fields Group */
+            div {
+                margin-bottom: 1.5em; /* Increased spacing between fields */
+            }
+            
+            /* Label Styling */
+            label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600; /* Bolder labels */
+                color: #495057;
+            }
+            
+            /* Input and Select Styling */
+            input[type="number"], 
+            select {
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                box-sizing: border-box;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+
+            input[type="number"]:focus, 
+            select:focus {
+                border-color: #80bdff;
+                outline: 0;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            }
+            
+            /* Button Styling */
+            button[type="submit"] {
+                background-color: #28a745; /* Green for action */
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                transition: background-color 0.3s, transform 0.1s;
+                width: 100%; /* Make button full width of form */
+            }
+            
+            button[type="submit"]:hover {
+                background-color: #218838; /* Darker green on hover */
+            }
+            
+            button[type="submit"]:active {
+                transform: translateY(1px);
+            }
+            
+            /* Prediction Result Area */
+            .result {
+                max-width: 400px; /* Match form width */
+                margin-top: 1.5em;
+                padding: 1.5em;
+                background: #e9f7ef; /* Light green background for result */
+                border: 1px solid #c3e6cb;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .result h3 {
+                color: #28a745; /* Green text for the main result */
+                margin-top: 0;
+            }
+            
+            .result p {
+                margin-bottom: 0;
+                font-size: 0.9em;
+                color: #5a6268;
+            }
+        </style>
+    </head>
+<body>
+    <h2>New Credit Applications</h2>
+    <form action="{% url 'predict' %}" method="POST">
+        {% csrf_token %}
+
+        <div>
+            <label for="duration">Loan Duration (months)</label>
+            <input type="number" name="duration" required min="1">
+        </div>
+        <div>
+            <label for="credit_amount">Credit Amount ($)</label>
+            <input type="number" name="credit_amount" required min="0">
+        </div>
+        <div>
+            <label for="age">Age</label>
+            <input type="number" name="age" required min="18">
+        </div>
+        <div>
+            <label for="purpose">Purpose</label>
+            <select name="purpose" required>
+                <option value="A40">Car (new)</option>
+                <option value="A41">Car (used)</option>
+                <option value="A42">Furniture / Equipment</option>
+                <option value="A43">Radio/ Television</option>
+            </select>
+        </div>
+    <button type="submit">Check Risk</button>
+    </form>
+{% if prediction_text %}
+    <h2 style="margin-top: 2em;">Prediction Result</h2>
+    <div class="result">
+        <h3>{{ prediction_text }}</h3>
+        <p>Confidence: {{ probability_text }}</p>
+    </div>
+{% endif %}
+</body>
+</html>
